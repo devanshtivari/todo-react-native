@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import {
   View,
   Text,
@@ -8,10 +8,16 @@ import {
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SingleTodo({todo , setTodos , todos }){
     const[edit,setEdit] = useState(false);
     const[edittext,setEdittext] = useState(todo.text);
+
+    useEffect(() => {
+      AsyncStorage.setItem("todos", JSON.stringify(todos))
+    }, [todos]);
+    
     
     const handleEdit = ()=> {
       if(!edit){setEdit(!edit);}
@@ -23,8 +29,19 @@ export default function SingleTodo({todo , setTodos , todos }){
           text: edittext,
          }:t
         ));
+        AsyncStorage.setItem("todos" , JSON.stringify(todos));
       }
     }
+    const fetchTodo = async()=> {
+      const data = await AsyncStorage.getItem("todos");
+      if(data){ setTodos(JSON.parse(data)); console.log(data)}
+    }; 
+
+    useEffect(() => {
+      fetchTodo();
+    }, []);
+    
+
     const handleDelete = (id) => {
       setTodos(todos.filter((t) => t.id !== id));
     }
