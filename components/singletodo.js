@@ -14,26 +14,39 @@ export default function SingleTodo({todo , setTodos , todos }){
     const[edittext,setEdittext] = useState(todo.text);
     
     const handleEdit = ()=> {
-      if(!edit)
-      setEdit(!edit);
+      if(!edit){setEdit(!edit);}
       else{
         setEdit(!edit);
         setTodos(todos.map((t)=>
-         t.id === 
+         t.id === todo.id ? {
+          id: t.id,
+          text: edittext,
+         }:t
         ));
       }
     }
+    const handleDelete = (id) => {
+      setTodos(todos.filter((t) => t.id !== id));
+    }
     return (
       <View style={styles.todo}>
-        {!edit ? <Text style={styles.todotext}>{todo.text}</Text> : <TextInput style={styles.todoedit} value={todo.text} onChangeText={(text) => setEdittext(text)}/>}
-        <TouchableOpacity>
-          <Feather
-            style={styles.todoactions}
-            name="edit"
-            size={23}
-            color="black"
-            onPress={handleEdit}
+        {!edit ? (
+          <Text style={styles.todotext}>{todo.text}</Text>
+        ) : (
+          <TextInput
+            style={styles.todoedit}
+            value={edittext}
+            onChangeText={(text) => setEdittext(text)}
           />
+        )}
+        <TouchableOpacity>
+            <Feather
+              style={styles.todoactions}
+              name="edit"
+              size={23}
+              color="black"
+              onPress={handleEdit}
+            />
         </TouchableOpacity>
         <TouchableOpacity>
           <AntDesign
@@ -41,6 +54,7 @@ export default function SingleTodo({todo , setTodos , todos }){
             name="delete"
             size={23}
             color="black"
+            onPress={() => handleDelete(todo.id)}
           />
         </TouchableOpacity>
       </View>

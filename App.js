@@ -39,7 +39,7 @@ export default function App() {
         <FlatList
           data={todos}
           renderItem={
-            ({item})=><SingleTodo todo={item} setTodo={setTodos}/>
+            ({item})=>(<SingleTodo todo={item} todos={todos} setTodos={setTodos}/>)
           }
           keyExtractor={
             (item)=>item.id.toString()
